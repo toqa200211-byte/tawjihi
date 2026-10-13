@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>خطة التوجيهي 2026–2027</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Amiri:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 :root{--g:#4f5d2f;--dg:#2c3a1c;--bg:#faf6ea;--bd:#cfc7a8;--br:#8a6a43;--s:#efe8cf;--t:#222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#faf6ea;--t:#222}}
@@ -202,7 +202,7 @@ body{padding:10px}
 .grid{grid-template-columns:1fr}
 .pi .ring{width:70px;height:70px}
 }
-
+ 
 .hd .cloud{border:2px solid #e29bc4;box-shadow:0 4px 14px rgba(197,138,232,.25)}
 .vs,.nt,.pcd,.dt span,.ad,.gf{border-style:solid}
 .tb{align-items:center;gap:10px;margin:12px 0}
@@ -238,15 +238,26 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .nx{font-size:14px}
 }
 @media print{.nx,.st,.tabs{display:none!important}}
+ 
+.ol{display:block;text-align:center;margin:4px auto;font-size:13px;font-weight:600;border-radius:14px;padding:3px 12px;width:fit-content;max-width:95%}
+.ol:empty{display:none}
+.ol.ok{background:#e2f3ea;color:#1f6b45}
+.ol.off{background:#fff1e4;color:#8a4a15}
+.ol.warn{background:#ffe9d6;color:#9a3a0c}
+html[data-theme=dark] .ol.ok{background:#223528;color:#9fe0b8}
+html[data-theme=dark] .ol.off{background:#3a2a1a;color:#ffd1a0}
+html[data-theme=dark] .ol.warn{background:#44261a;color:#ffbf9a}
+@media print{.ol{display:none!important}}
 </style><meta name="theme-color" content="#c58ae8"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
 <script>try{var t=localStorage.getItem("twTheme");if(!t&&matchMedia("(prefers-color-scheme:dark)").matches)t="dark";if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head><body>
-
+ 
 <div class="hd"><div class="cloud"><h1>خُطَّةُ التَّوْجِيهي 2026–2027 </h1>
 </div>
 </div>
 <div class="dt" id="dt"></div>
 <div class="nx" id="nx"></div>
+<div class="ol" id="ol"></div>
 <div class="gc" id="gc" role="button" tabindex="0" aria-label="بطاقة هدفي الأساسي"><div class="gi"><div class="gf gfront"><div class="ay" style="font-size:23px">﴿إِنَّ اللَّهَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ﴾</div><small style="color:#a05a99">سورة البقرة: 20</small></div><div class="gf gback"><div class="gt">هدفي هذا العام</div><div class="gn">95%+</div><div class="gh">بإذن الله أصل إليه بالثبات والاجتهاد</div></div></div></div>
 <div class="tb"><button class="tbb pri" id="eb">✎ تعديل الجدول</button><details class="st"><summary class="tbb">⚙ الإعدادات</summary><div class="menu"><button class="tbb" id="tt">☾ الوضع الليلي</button><button class="tbb" id="nb">بدء أسبوع جديد (مسح العلامات)</button><button class="tbb" id="rb">استعادة الجدول الأصلي</button></div></details></div>
 <div class="tabs" id="tabs"></div>
@@ -352,9 +363,13 @@ show(t0);tds[t0].classList.add('today');
 const lab=()=>{tt.textContent=H.dataset.theme==='dark'?'☀ الوضع النهاري':'☾ الوضع الليلي'};
 tt.onclick=()=>{const t=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=t;try{localStorage.setItem('twTheme',t)}catch(e){}lab()};lab();
 let th0;addEventListener('beforeprint',()=>{th0=H.dataset.theme;H.dataset.theme='light'});addEventListener('afterprint',()=>{if(th0)H.dataset.theme=th0;else delete H.dataset.theme});}
-if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
+{const ol=document.getElementById('ol');let ok=0;
+const st=()=>{if(!navigator.onLine){ol.textContent='غير متصل بالإنترنت — الجدول يعمل بشكل طبيعي';ol.className='ol off'}else if(ok===-1){ol.textContent='للعمل بدون إنترنت: ارفعي ملف sw.js إلى المستودع';ol.className='ol warn'}else if(ok===1){ol.textContent='✓ جاهز للعمل بدون إنترنت';ol.className='ol ok'}else{ol.textContent='';ol.className='ol'}};
+addEventListener('online',st);addEventListener('offline',st);
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(()=>{ok=1;st()}).catch(()=>{ok=/github\.io$/.test(location.hostname)?-1:0;st()})}else st()}
 setInterval(markNow,60000);
 {const st=document.querySelector('.st');document.addEventListener('click',e=>{if(!e.target.closest('.st'))st.open=false})}
 {let x0=0,y0=0;const w=document.querySelector('.wrap');w.addEventListener('touchstart',e=>{const t=e.touches[0];x0=t.clientX;y0=t.clientY},{passive:true});
 w.addEventListener('touchend',e=>{if(e.target.closest('textarea,input'))return;const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;if(innerWidth>820||Math.abs(dx)<70||Math.abs(dy)>50)return;show(Math.max(0,Math.min(6,cdx+(dx>0?1:-1))))},{passive:true})}
 </script></body></html>
+ 
